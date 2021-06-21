@@ -29,7 +29,7 @@ func main() {
 	}
 
 	t := template.Must(template.New("template.tmpl").ParseFiles("new.html"))
-	err = t.Execute(os.Stdout, string(fileContents))
+	err = t.Execute(f, string(fileContents))
 	if err != nil {
 		panic(err)
 	}
