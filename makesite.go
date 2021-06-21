@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"text/template"
@@ -23,11 +22,17 @@ func main() {
 
 		panic(err)
 	}
-	fmt.Print(string(fileContents))
+
+	f, err := os.Create("first-post.html")
+	if err != nil {
+		panic(err)
+	}
 
 	t := template.Must(template.New("template.tmpl").ParseFiles("new.html"))
 	err = t.Execute(os.Stdout, string(fileContents))
 	if err != nil {
 		panic(err)
 	}
+
+	f.Close()
 }
