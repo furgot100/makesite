@@ -1,35 +1,47 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	"text/template"
 )
 
-type entry struct {
-	Name string
-	Done bool
-}
-
-type ToDo struct {
-	User string
-	List []entry
+type Page struct {
+	Title string
+	Body  string
 }
 
 func main() {
-	fileContents, err := ioutil.ReadFile("first-post.txt")
+	// defining flag
+	var filename string
+
+	//define the flag, using the pointer to filename variable
+	flag.StringVar(&filename, "file", "", "Text file name")
+	flag.Parse()
+	if filename == "" {
+		fmt.Println("Why")
+		return
+	}
+
+	fileContents, err := ioutil.ReadFile(filename)
+
 	if err != nil {
 		panic(err)
 	}
-	f, err := os.Create("first-post.html")
+
+	fileCreator, err := os.Create(strings.SplitN(filename, ".", 2)[0] + ".html")
+
 	if err != nil {
 		panic(err)
 	}
 
 	t := template.Must(template.New("template.tmpl").ParseFiles("template.tmpl"))
-	err = t.Execute(f, string(fileContents))
+	err = t.Execute(fileCreator, string(fileContents))
 	if err != nil {
 		panic(err)
 	}
-	f.Close()
+	fileCreator.Close()
 }
