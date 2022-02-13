@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/gomarkdown/markdown"
 )
 
 type Page struct {
@@ -30,6 +32,10 @@ func main() {
 	} else if filename != "" {
 		fileConverter(filename)
 	}
+
+	md := []byte("test.md")
+	output := markdown.ToHTML(md, nil, nil)
+
 }
 
 func fileConverter(filename string) {
